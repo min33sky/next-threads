@@ -2,6 +2,14 @@
 
 > Meta Threads X Next.js13
 
+## Stacks
+
+- Next.js
+- TypeScript
+- Tailwind CSS
+- Clerk
+- MongoDB
+
 ## Environment Variables
 
 ```bash

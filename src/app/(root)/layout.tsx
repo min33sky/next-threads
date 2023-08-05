@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import Topbar from '@/components/shared/Topbar';
 import LeftSidebar from '@/components/shared/LeftSidebar';
 import Bottombar from '@/components/shared/Bottombar';
+import RightSidebar from '@/components/shared/RightSidebar';
 
 export const metadata: Metadata = {
   title: 'Threads',
@@ -18,15 +19,18 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="ko">
-        <body className="">
+        <body className="antialiased">
           <Topbar />
 
-          <main>
+          <main className="flex flex-row">
             <LeftSidebar />
-            <section className="main-container">
+            <section
+              className="flex flex-col min-h-screen flex-1 items-center bg-dark-1
+                    px-6 pb-10 pt-28 max-md:pb-32 sm:px-10"
+            >
               <div className="w-full max-w-4xl">{children}</div>
             </section>
-            {/* RightSidebar */}
+            <RightSidebar />
           </main>
 
           <Bottombar />

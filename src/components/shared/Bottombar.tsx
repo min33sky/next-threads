@@ -10,8 +10,8 @@ export default function Bottombar() {
   const pathname = usePathname();
 
   return (
-    <section className="bottombar">
-      <div className="bottombar_container">
+    <section className="fixed bottom-0 z-10 w-full rounded-t-3xl bg-glassmorphism p-4 backdrop-blur-lg xs:px-7 md:hidden">
+      <div className="flex items-center justify-between gap-3 xs:gap-5">
         {sidebarLinks.map((link) => {
           const isActive =
             (pathname.includes(link.route) && link.route.length > 1) ||
@@ -21,7 +21,10 @@ export default function Bottombar() {
             <Link
               href={link.route}
               key={link.label}
-              className={cn('bottombar_link', isActive && 'bg-primary-500')}
+              className={cn(
+                'relative flex flex-col items-center gap-2 rounded-lg p-2 sm:flex-1 sm:px-2 sm:py-2.5',
+                isActive && 'bg-primary-500',
+              )}
             >
               <Image
                 src={link.imgURL}
