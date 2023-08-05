@@ -1,6 +1,8 @@
 import { ClerkProvider } from '@clerk/nextjs';
 import '../globals.css';
 import type { Metadata } from 'next';
+import Topbar from '@/components/shared/Topbar';
+import LeftSidebar from '@/components/shared/LeftSidebar';
 
 export const metadata: Metadata = {
   title: 'Threads',
@@ -16,10 +18,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="ko">
         <body className="">
-          {/* Topbar */}
+          <Topbar />
 
           <main>
-            {/* LeftSidebar */}
+            <LeftSidebar />
             <section className="main-container">
               <div className="w-full max-w-4xl">{children}</div>
             </section>
