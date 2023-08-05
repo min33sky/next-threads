@@ -1,9 +1,7 @@
-import { Button } from '@/components/ui/button';
-
 export default function Home() {
   return (
     <main>
-      <Button>ㅎㅇㅎㅇ</Button>
+      <h1 className="text-white">먼데</h1>
     </main>
   );
 }
