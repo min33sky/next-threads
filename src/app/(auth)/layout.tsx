@@ -14,7 +14,7 @@ export default function AuthLayout({
   return (
     <ClerkProvider>
       <html lang="ko">
-        <body>{children}</body>
+        <body className="bg-dark-1">{children}</body>
       </html>
     </ClerkProvider>
   );
