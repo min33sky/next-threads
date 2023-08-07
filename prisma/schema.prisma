@@ -11,7 +11,8 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId // MongoDB ID
+  userId    String   @unique // Clerk Auth ID - 이 아이디로 Clerk에서 유저를 식별
   username  String   @unique
   name      String
   image     String

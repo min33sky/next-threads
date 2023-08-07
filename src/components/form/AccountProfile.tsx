@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UserRequest, UserValidation } from '@/lib/validations/user';
-import { z } from 'zod';
 import { Button } from '../ui/button';
 import {
   Form,
@@ -20,12 +19,14 @@ import Image from 'next/image';
 import { Textarea } from '../ui/textarea';
 import { isBase64Image } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthing';
+import { updateUser } from '@/lib/actions/user.action';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface AccountProfileProps {
   user: {
     id: string;
-    objectId: string;
-    username: string;
+    objectId: string | undefined;
+    username: string | null;
     name: string;
     bio: string;
     image: string;
@@ -37,6 +38,8 @@ export default function AccountProfile({
   user,
   btnTitle,
 }: AccountProfileProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [files, setFiles] = useState<File[]>([]);
   const { startUpload } = useUploadThing('imageUploader');
 
@@ -93,6 +96,20 @@ export default function AccountProfile({
     }
 
     // TODO: Update user profile
+    await updateUser({
+      userId: user.id,
+      name: data.name,
+      username: data.username,
+      bio: data.bio,
+      image: data.profile_photo,
+      path: pathname,
+    });
+
+    if (pathname === '/profile/edit') {
+      router.back();
+    } else {
+      router.push('/');
+    }
   };
 
   return (
