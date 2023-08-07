@@ -18,6 +18,8 @@ import {
 import { Input } from '../ui/input';
 import Image from 'next/image';
 import { Textarea } from '../ui/textarea';
+import { isBase64Image } from '@/lib/utils';
+import { useUploadThing } from '@/lib/uploadthing';
 
 interface AccountProfileProps {
   user: {
@@ -36,6 +38,7 @@ export default function AccountProfile({
   btnTitle,
 }: AccountProfileProps) {
   const [files, setFiles] = useState<File[]>([]);
+  const { startUpload } = useUploadThing('imageUploader');
 
   const form = useForm<UserRequest>({
     resolver: zodResolver(UserValidation),
@@ -74,8 +77,22 @@ export default function AccountProfile({
     }
   };
 
-  const onSubmit = (data: UserRequest) => {
+  const onSubmit = async (data: UserRequest) => {
     console.log(data);
+
+    const blob = data.profile_photo;
+
+    const hasImageChanged = isBase64Image(blob);
+
+    if (hasImageChanged) {
+      const imgRes = await startUpload(files);
+
+      if (imgRes && imgRes[0].fileUrl) {
+        data.profile_photo = imgRes[0].fileUrl;
+      }
+    }
+
+    // TODO: Update user profile
   };
 
   return (
