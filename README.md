@@ -1,6 +1,6 @@
 # Next Threads
 
-> Meta Threads X Next.js13
+> Meta Threads X Next.js13 (with Server Action)
 
 ## Stacks
 

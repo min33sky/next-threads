@@ -20,4 +20,21 @@ model User {
   onboarded Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  threads   Thread[]
+}
+
+model Thread {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId // MongoDB ID
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String   @db.ObjectId
+
+  // 순환 참조 관계
+  // https://www.prisma.io/docs/concepts/components/prisma-schema/relations/self-relations#one-to-many-self-relations
+  // https://www.prisma.io/docs/concepts/components/prisma-schema/relations/referential-actions/special-rules-for-referential-actions
+  parentThread   Thread?  @relation("ParentThread", fields: [parentThreadId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentThreadId String?  @db.ObjectId //? 댓글의 경우 부모 Thread의 ID, 대댓글의 경우 부모 댓글의 ID
+  children       Thread[] @relation("ParentThread")
 }
