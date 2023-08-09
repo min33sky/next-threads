@@ -18,7 +18,7 @@ export default async function CreateThreadPage() {
   return (
     <>
       <h1 className="text-heading2-bold text-light-1">Create Thread.</h1>;
-      <PostThread userId={user.id} />
+      <PostThread userId={userInfo.id} />
     </>
   );
 }
