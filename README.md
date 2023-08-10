@@ -9,6 +9,8 @@
 - Tailwind CSS
 - Clerk
 - MongoDB
+- Prisma
+- UploadThing
 
 ## Environment Variables
 

@@ -20,7 +20,13 @@ model User {
   onboarded Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  threads   Thread[]
+
+  threads Thread[]
+
+  // MongoDB에서 Many-to-Many 관계 표현
+  // https://pris.ly/d/document-database-many-to-many
+  communities  Community[] @relation(fields: [communityIds], references: [id])
+  communityIds String[]    @db.ObjectId
 }
 
 model Thread {
@@ -37,4 +43,21 @@ model Thread {
   parentThread   Thread?  @relation("ParentThread", fields: [parentThreadId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   parentThreadId String?  @db.ObjectId //? 댓글의 경우 부모 Thread의 ID, 대댓글의 경우 부모 댓글의 ID
   children       Thread[] @relation("ParentThread")
+
+  community   Community? @relation(fields: [communityId], references: [id])
+  communityId String?    @db.ObjectId
+}
+
+model Community {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId // MongoDB ID
+  username  String   @unique
+  name      String
+  image     String
+  bio       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  threads   Thread[]
+  members   User[]   @relation(fields: [memberIds], references: [id])
+  memberIds String[] @db.ObjectId
 }
