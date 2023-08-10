@@ -95,7 +95,6 @@ export default function AccountProfile({
       }
     }
 
-    // TODO: Update user profile
     await updateUser({
       userId: user.id,
       name: data.name,

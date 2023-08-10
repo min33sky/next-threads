@@ -11,6 +11,7 @@
 - MongoDB
 - Prisma
 - UploadThing
+- Svix
 
 ## Environment Variables
 
