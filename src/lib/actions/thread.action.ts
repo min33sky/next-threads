@@ -89,3 +89,60 @@ export async function createThread({
     throw new Error(`Failed to create thread: ${error.message}`);
   }
 }
+
+export async function fetchThreadById(threadId: string) {
+  try {
+    const thread = await prisma.thread.findUnique({
+      where: {
+        id: threadId,
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            userId: true,
+            name: true,
+            image: true,
+          },
+        },
+        community: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
+        children: {
+          select: {
+            author: {
+              select: {
+                id: true,
+                userId: true,
+                name: true,
+                image: true,
+              },
+            },
+            parentThreadId: true,
+            children: {
+              select: {
+                author: {
+                  select: {
+                    id: true,
+                    userId: true,
+                    name: true,
+                    image: true,
+                  },
+                },
+                parentThreadId: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return thread;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch thread: ${error.message}`);
+  }
+}
