@@ -11,7 +11,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
     // Create a query to fetch the posts that have no parent (top-level threads) (a thread that is not a comment/reply).
     const posts = await prisma.thread.findMany({
       where: {
-        parentThreadId: undefined,
+        parentThread: null,
       },
       // Include the author of the post in the query.
       include: {
@@ -46,11 +46,13 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
     // Count the total number of top-level posts (threads) i.e., threads that are not comments.
     const totalPostsCount = await prisma.thread.count({
       where: {
-        parentThreadId: undefined,
+        parentThread: null,
       },
     });
 
     const hasNext = totalPostsCount > skipAmount + posts.length;
+
+    console.log('아 시발 진짜: ', posts);
 
     return {
       posts,
