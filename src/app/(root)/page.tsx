@@ -7,6 +7,9 @@ export const fetchCache = 'force-no-store';
 
 export default async function Home() {
   const user = await currentUser();
+
+  console.log('### user: ', user);
+
   if (!user) return null;
 
   const result = await fetchPosts(1, 30);

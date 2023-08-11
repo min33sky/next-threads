@@ -1,4 +1,5 @@
 import ThreadCard from '@/components/card/ThreadCard';
+import Comment from '@/components/form/Comment';
 import { fetchThreadById } from '@/lib/actions/thread.action';
 import { fetchUser } from '@/lib/actions/user.action';
 import { currentUser } from '@clerk/nextjs';
@@ -44,6 +45,16 @@ export default async function ThreadDetailPage({ params: { id } }: Props) {
           comments={thread.children}
         />
       </div>
+
+      <div className="mt-7">
+        <Comment
+          threadId={id}
+          currentUserId={userInfo.id}
+          currentUserImg={userInfo.image}
+        />
+      </div>
+
+      <div className="mt-10">{/* 댓글 출력 영역 */}</div>
     </section>
   );
 }

@@ -2,7 +2,6 @@
 
 import { revalidatePath } from 'next/cache';
 import { prisma } from '../db';
-import { skip } from 'node:test';
 
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
   try {
@@ -145,4 +144,42 @@ export async function fetchThreadById(threadId: string) {
   } catch (error: any) {
     throw new Error(`Failed to fetch thread: ${error.message}`);
   }
+}
+
+interface AddCommentToThreadParams {
+  threadId: string;
+  commentText: string;
+  userId: string;
+  path: string;
+}
+
+export async function addCommentToThread({
+  commentText,
+  path,
+  threadId,
+  userId,
+}: AddCommentToThreadParams) {
+  try {
+    // Find the original thread by its ID.
+    const originalThread = await prisma.thread.findUnique({
+      where: {
+        id: threadId,
+      },
+    });
+
+    if (!originalThread) {
+      throw new Error('Thread not found');
+    }
+
+    // Create the new commnet thread.
+    await prisma.thread.create({
+      data: {
+        text: commentText,
+        authorId: userId,
+        parentThreadId: threadId, // Set the parentId to the original thread's ID.
+      },
+    });
+
+    revalidatePath(path);
+  } catch (error: any) {}
 }

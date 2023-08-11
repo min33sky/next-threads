@@ -1,8 +1,11 @@
 import { z } from 'zod';
 
 const environment = z.object({
+  DATABASE_URL: z.string(),
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
   CLERK_SECRET_KEY: z.string(),
+  UPLOADTHING_SECRET: z.string(),
+  UPLOADTHING_APP_ID: z.string(),
 });
 
 export type Environment = z.infer<typeof environment>;
