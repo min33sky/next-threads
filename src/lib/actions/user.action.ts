@@ -11,6 +11,9 @@ export async function fetchUser(id: string) {
   try {
     const user = await prisma.user.findUnique({
       where: { id },
+      include: {
+        threads: true,
+      },
     });
 
     return user;
