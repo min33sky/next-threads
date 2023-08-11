@@ -54,7 +54,25 @@ export default async function ThreadDetailPage({ params: { id } }: Props) {
         />
       </div>
 
-      <div className="mt-10">{/* 댓글 출력 영역 */}</div>
+      <div className="mt-10">
+        {thread.children.map((childItem, idx) => (
+          <ThreadCard
+            key={childItem.id}
+            id={childItem.id}
+            currentUserId={user.id}
+            parentId={childItem.parentThreadId}
+            content={childItem.text}
+            author={childItem.author}
+            community={childItem.community}
+            createdAt={childItem.createdAt}
+            comments={childItem.children}
+            isComment
+          />
+          // <div key={idx} className="text-white">
+          //   댓글....
+          // </div>
+        ))}
+      </div>
     </section>
   );
 }

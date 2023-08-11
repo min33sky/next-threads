@@ -114,7 +114,7 @@ export async function fetchThreadById(threadId: string) {
           },
         },
         children: {
-          select: {
+          include: {
             author: {
               select: {
                 id: true,
@@ -123,7 +123,13 @@ export async function fetchThreadById(threadId: string) {
                 image: true,
               },
             },
-            parentThreadId: true,
+            community: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+              },
+            },
             children: {
               select: {
                 author: {
