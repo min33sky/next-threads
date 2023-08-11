@@ -27,12 +27,12 @@ export default async function ThreadDetailPage({ params: { id } }: Props) {
 
   const thread = await fetchThreadById(id);
 
-  console.log('thread: ', thread);
+  // console.log('thread: ', thread);
 
   if (!thread) return null;
 
   return (
-    <section>
+    <section className="relative">
       <div>
         <ThreadCard
           id={thread?.id}
@@ -54,7 +54,7 @@ export default async function ThreadDetailPage({ params: { id } }: Props) {
         />
       </div>
 
-      <div className="mt-10">
+      <div className="mt-10 space-y-8">
         {thread.children.map((childItem, idx) => (
           <ThreadCard
             key={childItem.id}
@@ -68,9 +68,6 @@ export default async function ThreadDetailPage({ params: { id } }: Props) {
             comments={childItem.children}
             isComment
           />
-          // <div key={idx} className="text-white">
-          //   댓글....
-          // </div>
         ))}
       </div>
     </section>
