@@ -1,7 +1,7 @@
 import ThreadCard from '@/components/card/ThreadCard';
 import Comment from '@/components/form/Comment';
 import { fetchThreadById } from '@/lib/actions/thread.action';
-import { fetchUser } from '@/lib/actions/user.action';
+import { fetchMyStatus } from '@/lib/actions/user.action';
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -21,7 +21,7 @@ export default async function ThreadDetailPage({ params: { id } }: Props) {
 
   if (!user) return null;
 
-  const userInfo = await fetchUser(user.id);
+  const userInfo = await fetchMyStatus(user.id);
 
   if (!userInfo?.onboarded) return redirect('/onboarding');
 

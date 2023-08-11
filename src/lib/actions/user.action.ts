@@ -5,13 +5,33 @@ import { prisma } from '../db';
 
 /**
  * 회원 정보를 가져옵니다.
+ * @param id DB ID
+ */
+export async function fetchUser(id: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id },
+    });
+
+    return user;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch user: ${error.message}`);
+  }
+}
+
+/**
+ * 로그인 한 회원 정보를 가져옵니다.
  * @param userId Clerk User ID
  */
-export async function fetchUser(userId: string) {
+export async function fetchMyStatus(userId: string) {
   try {
-    return await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { userId },
     });
+
+    console.log('########## fetchUser: ', user);
+
+    return user;
   } catch (error: any) {
     throw new Error(`Failed to fetch user: ${error.message}`);
   }
