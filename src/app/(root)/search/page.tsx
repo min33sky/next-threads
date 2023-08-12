@@ -1,3 +1,4 @@
+import UserCard from '@/components/card/UserCard';
 import { fetchUser, fetchUsers } from '@/lib/actions/user.action';
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
@@ -38,17 +39,16 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           <p className="no-result">No Result</p>
         ) : (
           <>
-            <div>유저 카드 들어올 자리....</div>
-            {/* {result.users.map((person) => (
+            {result.users.map((person) => (
               <UserCard
                 key={person.id}
                 id={person.id}
                 name={person.name}
                 username={person.username}
                 imgUrl={person.image}
-                personType='User'
+                personType="User"
               />
-            ))} */}
+            ))}
           </>
         )}
       </div>
