@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { profileTabs } from '@/constants';
 import { fetchUser } from '@/lib/actions/user.action';
 import { currentUser } from '@clerk/nextjs';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import React from 'react';
 import Image from 'next/image';
 import ThreadsTab from '@/components/shared/ThreadsTab';
@@ -21,9 +21,10 @@ export default async function ProfileDetailPage({ params: { id } }: Props) {
 
   const userInfo = await fetchUser(id);
 
-  console.log(['#### 프로필 페이지 유저 정보: ', userInfo]);
+  if (!userInfo) return notFound();
 
-  if (!userInfo?.onboarded) redirect('/onboarding');
+  if (!userInfo.onboarded) redirect('/onboarding');
+
   return (
     <section>
       <ProfileHeader

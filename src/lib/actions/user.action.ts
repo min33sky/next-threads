@@ -2,10 +2,12 @@
 
 import { revalidatePath } from 'next/cache';
 import { prisma } from '../db';
+import { notFound } from 'next/navigation';
+import { Prisma } from '@prisma/client';
 
 /**
  * 회원 정보를 가져옵니다.
- * @param userId Clerk User ID
+ * @param userId Clerk USER ID
  */
 export async function fetchUser(userId: string) {
   try {
@@ -15,8 +17,6 @@ export async function fetchUser(userId: string) {
         threads: true,
       },
     });
-
-    // console.log('########## fetchUser: ', user);
 
     return user;
   } catch (error: any) {
