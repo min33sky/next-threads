@@ -1,11 +1,12 @@
 import ProfileHeader from '@/components/shared/ProfileHeader';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { profileTabs } from '@/constants';
-import { fetchMyStatus, fetchUser } from '@/lib/actions/user.action';
+import { fetchUser } from '@/lib/actions/user.action';
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import Image from 'next/image';
+import ThreadsTab from '@/components/shared/ThreadsTab';
 
 interface Props {
   params: {
@@ -22,8 +23,7 @@ export default async function ProfileDetailPage({ params: { id } }: Props) {
 
   console.log(['#### 프로필 페이지 유저 정보: ', userInfo]);
 
-  if (!userInfo) return null;
-
+  if (!userInfo?.onboarded) redirect('/onboarding');
   return (
     <section>
       <ProfileHeader
@@ -57,6 +57,21 @@ export default async function ProfileDetailPage({ params: { id } }: Props) {
               </TabsTrigger>
             ))}
           </TabsList>
+
+          {profileTabs.map((tab) => (
+            <TabsContent
+              key={`content-${tab.label}`}
+              value={tab.value}
+              className="w-full text-light-1"
+            >
+              {/* @ts-ignore */}
+              <ThreadsTab
+                currentUserId={user.id}
+                accountId={userInfo.id}
+                accountType="User"
+              />
+            </TabsContent>
+          ))}
         </Tabs>
       </div>
     </section>

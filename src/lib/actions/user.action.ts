@@ -5,34 +5,18 @@ import { prisma } from '../db';
 
 /**
  * 회원 정보를 가져옵니다.
- * @param id DB ID
+ * @param userId Clerk User ID
  */
-export async function fetchUser(id: string) {
+export async function fetchUser(userId: string) {
   try {
     const user = await prisma.user.findUnique({
-      where: { id },
+      where: { userId },
       include: {
         threads: true,
       },
     });
 
-    return user;
-  } catch (error: any) {
-    throw new Error(`Failed to fetch user: ${error.message}`);
-  }
-}
-
-/**
- * 로그인 한 회원 정보를 가져옵니다.
- * @param userId Clerk User ID
- */
-export async function fetchMyStatus(userId: string) {
-  try {
-    const user = await prisma.user.findUnique({
-      where: { userId },
-    });
-
-    console.log('########## fetchUser: ', user);
+    // console.log('########## fetchUser: ', user);
 
     return user;
   } catch (error: any) {
@@ -81,5 +65,49 @@ export async function updateUser({
     }
   } catch (error: any) {
     throw new Error(`Failed to create/update user: ${error.message}`);
+  }
+}
+
+/**
+ * 해당 유저가 작성한 글을 가져옵니다.
+ * @param id 유저 DB ID
+ */
+export async function fetchUserPosts(id: string) {
+  try {
+    // Find all threads authored by the use with the given userId
+    const threads = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        threads: {
+          include: {
+            author: true,
+            community: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+              },
+            },
+            children: {
+              include: {
+                author: {
+                  select: {
+                    id: true,
+                    name: true,
+                    image: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return threads;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch user posts: ${error.message}`);
   }
 }

@@ -1,5 +1,5 @@
 import AccountProfile from '@/components/form/AccountProfile';
-import { fetchMyStatus } from '@/lib/actions/user.action';
+import { fetchUser } from '@/lib/actions/user.action';
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -11,7 +11,7 @@ export default async function OnboardPage() {
 
   if (!user) return null; // to avoid typescript warnings
 
-  const userInfo = await fetchMyStatus(user.id);
+  const userInfo = await fetchUser(user.id);
 
   if (userInfo?.onboarded) return redirect('/');
 

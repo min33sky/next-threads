@@ -1,5 +1,5 @@
 import PostThread from '@/components/form/PostThread';
-import { fetchMyStatus } from '@/lib/actions/user.action';
+import { fetchUser } from '@/lib/actions/user.action';
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -11,7 +11,7 @@ export default async function CreateThreadPage() {
 
   if (!user) return null;
 
-  const userInfo = await fetchMyStatus(user.id);
+  const userInfo = await fetchUser(user.id);
 
   console.log('로그인 유저 정보: ', userInfo);
 

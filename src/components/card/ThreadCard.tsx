@@ -2,17 +2,14 @@ import Link from 'next/link';
 import React from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { User } from '@prisma/client';
 
 interface Props {
   id: string;
   currentUserId: string;
   parentId: string | null;
   content: string;
-  author: {
-    name: string;
-    image: string;
-    id: string;
-  };
+  author: User;
   community: {
     id: string;
     name: string;
@@ -48,7 +45,10 @@ export default function ThreadCard({
       <div className="flex items-start justify-between">
         <div className="flex flex-1 flex-row gap-4">
           <div className="flex flex-col items-center">
-            <Link href={`/profile/${author.id}`} className="relative h-11 w-11">
+            <Link
+              href={`/profile/${author.userId}`}
+              className="relative h-11 w-11"
+            >
               <Image
                 src={author.image}
                 alt="user_community_image"
@@ -61,7 +61,7 @@ export default function ThreadCard({
           </div>
 
           <div className="flex flex-col">
-            <Link href={`/profile/${author.id}`} className="w-fit">
+            <Link href={`/profile/${author.userId}`} className="w-fit">
               <h4 className="cursor-pointer text-base-semibold text-light-1">
                 {author.name}
               </h4>

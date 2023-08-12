@@ -2,7 +2,7 @@
 
 import { sidebarLinks } from '@/constants';
 import { cn } from '@/lib/utils';
-import { SignOutButton, SignedIn } from '@clerk/nextjs';
+import { SignOutButton, SignedIn, useAuth } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
@@ -10,6 +10,8 @@ import { useRouter, usePathname } from 'next/navigation';
 export default function LeftSidebar() {
   const router = useRouter();
   const pathname = usePathname();
+
+  const { userId } = useAuth();
 
   return (
     <section
@@ -22,6 +24,9 @@ export default function LeftSidebar() {
           const isActive =
             (pathname.includes(link.route) && link.route.length > 1) ||
             pathname === link.route;
+
+          // TODO: MongoID를 받아야함
+          if (link.route === '/profile') link.route = `${link.route}/${userId}`;
 
           return (
             <Link
