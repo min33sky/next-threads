@@ -216,3 +216,43 @@ export async function fetchUsers({
     throw new Error(`Failed to fetch users: ${error.message}`);
   }
 }
+
+export async function getActivity(userId: string) {
+  try {
+    // Find all threads created by the user
+    const userThreads = await prisma.thread.findMany({
+      where: {
+        authorId: userId,
+      },
+      include: {
+        children: true,
+      },
+    });
+
+    // Collect all the child thread ids (replies) from the 'children' field of each user thread
+    const childThreadIds = userThreads.reduce((acc, thread) => {
+      return [...acc, ...thread.children.map((child) => child.id)];
+    }, [] as string[]);
+
+    // console.log('############### userThreadIds: ', childThreadIds);
+
+    // Find and return the child threads (replies) excluding the ones created by the same user
+    const replies = await prisma.thread.findMany({
+      where: {
+        id: {
+          in: childThreadIds,
+        },
+        authorId: {
+          not: userId,
+        },
+      },
+      include: {
+        author: true,
+      },
+    });
+
+    return replies;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch user activity: ${error.message}`);
+  }
+}
