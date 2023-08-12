@@ -111,3 +111,108 @@ export async function fetchUserPosts(id: string) {
     throw new Error(`Failed to fetch user posts: ${error.message}`);
   }
 }
+
+interface FetchUsersParams {
+  userId: string;
+  searchString?: string;
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: 'asc' | 'desc';
+}
+// Almost similar to Thead (search + pagination) and Community (search + pagination)
+export async function fetchUsers({
+  userId,
+  pageNumber = 1,
+  pageSize = 20,
+  searchString = '',
+  sortBy = 'desc',
+}: FetchUsersParams) {
+  try {
+    // Calculate the number of users to skip based on the page number and page size.
+    const skipAmount = (pageNumber - 1) * pageSize;
+
+    // If the search string is not empty, add the $or operator to match either username or name fields.
+    // const searchQuery = searchString
+    //   ? {
+    //       OR: [
+    //         {
+    //           username: {
+    //             contains: searchString,
+    //             mode: 'insensitive',
+    //           },
+    //         },
+    //         {
+    //           name: {
+    //             contains: searchString,
+    //             mode: 'insensitive',
+    //           },
+    //         },
+    //       ],
+    //     }
+    //   : {};
+
+    const users = await prisma.user.findMany({
+      where: {
+        OR: [
+          {
+            username: {
+              contains: searchString,
+              mode: 'insensitive',
+            },
+          },
+          {
+            name: {
+              contains: searchString,
+              mode: 'insensitive',
+            },
+          },
+        ],
+        NOT: {
+          userId,
+        },
+      },
+      // Order the users by the date they were created in descending order.
+      orderBy: {
+        createdAt: sortBy,
+      },
+      // Skip the first X users.
+      skip: skipAmount,
+      // Only take X users.
+      take: pageSize,
+    });
+
+    // Count the total number of users that match the search criteria (without pagination).
+    const totalUsersCount = await prisma.user.count({
+      where: {
+        OR: [
+          {
+            username: {
+              contains: searchString,
+              mode: 'insensitive',
+            },
+          },
+          {
+            name: {
+              contains: searchString,
+              mode: 'insensitive',
+            },
+          },
+        ],
+        NOT: {
+          userId,
+        },
+      },
+    });
+
+    // Check if there are more users beyond the current page.
+    const hasNext = totalUsersCount > skipAmount + users.length;
+
+    return {
+      users,
+      hasNext,
+      totalUsersCount,
+    };
+  } catch (error: any) {
+    throw new Error(`Failed to fetch users: ${error.message}`);
+  }
+}
