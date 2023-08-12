@@ -98,14 +98,7 @@ export async function fetchThreadById(threadId: string) {
         id: threadId,
       },
       include: {
-        author: {
-          select: {
-            id: true,
-            userId: true,
-            name: true,
-            image: true,
-          },
-        },
+        author: true,
         community: {
           select: {
             id: true,
@@ -115,14 +108,7 @@ export async function fetchThreadById(threadId: string) {
         },
         children: {
           include: {
-            author: {
-              select: {
-                id: true,
-                userId: true,
-                name: true,
-                image: true,
-              },
-            },
+            author: true,
             community: {
               select: {
                 id: true,
