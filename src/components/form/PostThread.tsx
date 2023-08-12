@@ -18,6 +18,7 @@ import {
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { createThread } from '@/lib/actions/thread.action';
+import { useOrganization } from '@clerk/nextjs';
 
 interface PostThreadProps {
   userId: string;
@@ -26,6 +27,8 @@ interface PostThreadProps {
 export default function PostThread({ userId }: PostThreadProps) {
   const router = useRouter();
   const pathname = usePathname();
+
+  const { organization } = useOrganization();
 
   const form = useForm<ThreadValidationType>({
     resolver: zodResolver(ThreadValidation),
@@ -41,7 +44,7 @@ export default function PostThread({ userId }: PostThreadProps) {
     await createThread({
       text: data.thread,
       author: userId,
-      communityId: null,
+      communityId: organization ? organization.id : null,
       path: pathname,
     });
 

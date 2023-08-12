@@ -2,6 +2,14 @@
 
 import { prisma } from '../db';
 
+/**
+ * TODO:
+ * [v] 커뮤니티 생성 성공
+ * [v] 커뮤니티 삭제 성공
+ * [] 해당 커뮤니티에 글 등록 성공
+ *
+ */
+
 export async function createCommunity(
   id: string, // clerk id
   name: string,

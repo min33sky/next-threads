@@ -78,12 +78,22 @@ export async function createThread({
   path,
 }: CreateThreadParams) {
   try {
-    await prisma.thread.create({
-      data: {
-        text,
-        authorId: author,
-      },
-    });
+    if (communityId) {
+      await prisma.thread.create({
+        data: {
+          text,
+          authorId: author,
+          communityId: communityId,
+        },
+      });
+    } else {
+      await prisma.thread.create({
+        data: {
+          text,
+          authorId: author,
+        },
+      });
+    }
 
     revalidatePath(path);
   } catch (error: any) {

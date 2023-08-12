@@ -7,13 +7,9 @@ import React from 'react';
 export default async function CreateThreadPage() {
   const user = await currentUser();
 
-  console.log('##### user: ', user);
-
   if (!user) return null;
 
   const userInfo = await fetchUser(user.id);
-
-  console.log('로그인 유저 정보: ', userInfo);
 
   if (!userInfo?.onboarded) return redirect('/onboarding');
 
