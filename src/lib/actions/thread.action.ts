@@ -79,11 +79,21 @@ export async function createThread({
 }: CreateThreadParams) {
   try {
     if (communityId) {
+      const existingCommunity = await prisma.community.findUnique({
+        where: {
+          communityId,
+        },
+      });
+
+      if (!existingCommunity) {
+        throw new Error('Community does not exist.');
+      }
+
       await prisma.thread.create({
         data: {
           text,
           authorId: author,
-          communityId: communityId,
+          communityId: existingCommunity.id,
         },
       });
     } else {

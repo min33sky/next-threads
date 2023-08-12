@@ -38,3 +38,7 @@ UPLOADTHING_APP_ID=
 ## References
 
 1. Clerk Webhook 검증 라우터 [링크](https://gist.github.com/adrianhajdin/060e4c9d3d8d4274b7669e260dbbcc8e)
+
+## TODO
+
+- [ ] 커뮤니티 가입식 유저 정보가 포함 안됨
